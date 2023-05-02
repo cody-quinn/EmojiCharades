@@ -11,15 +11,16 @@ type Color =
     | Black
     | White
 
-type Avatar = { color: Color }
+type Avatar = { Color: Color }
 
-type Player =
-    { nickname: string
-      avatar: Avatar
-      actor: bool }
+type Player = {
+    Nickname: string
+    Avatar: Avatar
+    Actor: bool
+}
 
 /// Messages processed on the client
-type ResetStage = { newActor: string }
+type ResetStage = { NewActor: string }
 
 type Guess =
     | Correct

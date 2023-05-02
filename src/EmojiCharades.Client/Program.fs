@@ -9,56 +9,57 @@ open EmojiCharades.Shared
 let increment number = number + 1
 let decrement number = number - 1
 
-type GameState = { players: Player list }
+type GameState = { Players: Player list }
 
-let init () = { players = [] }, Cmd.none
+let init () = { Players = [] }, Cmd.none
 
 let update msg model =
     let fm =
         match msg with
         | AddPlayer player ->
-            let players = player :: model.players
-            { model with players = players }
+            let players = player :: model.Players
+            { model with Players = players }
         | RemovePlayer name ->
-            let players = model.players |> List.filter (fun p -> p.nickname <> name)
-            { model with players = players }
+            let players = model.Players |> List.filter (fun p -> p.Nickname <> name)
+            { model with Players = players }
         | _ -> model
 
     fm, Cmd.none
 
 let playerComp (player: Player) =
-    Html.div
-        [ Attr.className [ "rounded"; "bg-red-600"; "text-white"; "w-fit"; "px-3.5"; "py-2" ]
-          Attr.text player.nickname ]
+    Html.div [
+        Attr.className [ "rounded"; "bg-red-600"; "text-white"; "w-fit"; "px-3.5"; "py-2" ]
+        Attr.text player.Nickname
+    ]
 
 let view () =
     // let nextId = Helpers.makeIdGenerator()
     // let makeThing thing = ThingView (nextId()) thing
 
     let model, dispatch = Store.makeElmish init update ignore ()
-    let players model = model.players
-    
-    // let counter = Store.make 0
-    // let subscriber = counter |> Store.subscribe (fun i -> printfn "%d" i)
+    let players model = model.Players
 
-    Html.div
-        [ disposeOnUnmount [ model ]
+    Html.div [
+        disposeOnUnmount [ model ]
 
-          Bind.eachi ((model .> players), snd>>playerComp)
+        Bind.eachi (model .> players, snd >> playerComp)
 
-          Daisy.Button.button [
+        Daisy.Button.button [
             Daisy.Button.extraSmall
             Daisy.Button.primary
             Attr.text "Increment"
-            onClick (fun _ -> dispatch (AddPlayer { nickname = "Cody"; avatar = { color = Red }; actor = false })) []
-          ]
-          // Daisy.Button.button [
-          //   Daisy.Button.extraSmall
-          //   Daisy.Button.primary
-          //   Attr.text "Decrement"
-          //   onClick (fun _ -> Store.modify decrement counter) []
-          // ]
-          ]
+            onClick
+                (fun _ ->
+                    dispatch (
+                        AddPlayer {
+                            Nickname = "Cody"
+                            Avatar = { Color = Red }
+                            Actor = false
+                        }
+                    ))
+                []
+        ]
+    ]
 
 importSideEffects "./styles.css"
 Program.mount ("sutil-app", view ()) |> ignore
