@@ -26,6 +26,8 @@
             let
               dotnet-tools = (callPackage ./dotnet-tool.nix {});
             in [
+              nodejs
+
               dotnet-pkg
               (dotnet-tools.combineTools dotnet-pkg (with dotnet-tools.tools; [
                 fsautocomplete
