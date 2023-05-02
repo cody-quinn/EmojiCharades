@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmojiCharades.Shared\EmojiCharades.Shared.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Elmish.Bridge.Client" Version="7.0.2" />
+    <PackageReference Include="Fable.Remoting.Client" Version="7.25.0" />
+    <PackageReference Include="Sutil" Version="2.0.9" />
+    <PackageReference Include="Sutil.DaisyUI" Version="0.0.1" />
+    <PackageReference Include="Sutil.Router" Version="0.0.2" />
+  </ItemGroup>
+
+</Project>
