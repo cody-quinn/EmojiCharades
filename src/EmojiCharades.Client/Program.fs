@@ -11,6 +11,8 @@ let decrement number = number - 1
 
 type GameState = { players: Player list }
 
+let init () = { players = [] }, Cmd.none
+
 let update msg model =
     let fm =
         match msg with
@@ -30,25 +32,26 @@ let playerComp (player: Player) =
           Attr.text player.nickname ]
 
 let view () =
-    let counter = Store.make 0
-    let subscriber = counter |> Store.subscribe (fun i -> printfn "%d" i)
+    // let nextId = Helpers.makeIdGenerator()
+    // let makeThing thing = ThingView (nextId()) thing
+
+    let model, dispatch = Store.makeElmish init update ignore ()
+    let players model = model.players
+    
+    // let counter = Store.make 0
+    // let subscriber = counter |> Store.subscribe (fun i -> printfn "%d" i)
 
     Html.div
-        [ disposeOnUnmount [ counter; subscriber ]
+        [ disposeOnUnmount [ model ]
 
-          Bind.el (counter, Html.p)
+          Bind.eachi ((model .> players), snd>>playerComp)
 
-          playerComp
-              { nickname = "Cody"
-                avatar = { color = Red }
-                actor = false }
-
-          // Daisy.Button.button [
-          //   Daisy.Button.extraSmall
-          //   Daisy.Button.primary
-          //   Attr.text "Increment"
-          //   onClick (fun _ -> Store.modify increment counter) []
-          // ]
+          Daisy.Button.button [
+            Daisy.Button.extraSmall
+            Daisy.Button.primary
+            Attr.text "Increment"
+            onClick (fun _ -> dispatch (AddPlayer { nickname = "Cody"; avatar = { color = Red }; actor = false })) []
+          ]
           // Daisy.Button.button [
           //   Daisy.Button.extraSmall
           //   Daisy.Button.primary
