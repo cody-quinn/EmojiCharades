@@ -6,31 +6,7 @@ open Sutil.DaisyUI
 open Fable.Core.JsInterop
 open EmojiCharades.Shared
 
-let increment number = number + 1
-let decrement number = number - 1
-
-type GameState = { Players: Player list }
-
-let init () = { Players = [] }, Cmd.none
-
-let update msg model =
-    let fm =
-        match msg with
-        | AddPlayer player ->
-            let players = player :: model.Players
-            { model with Players = players }
-        | RemovePlayer name ->
-            let players = model.Players |> List.filter (fun p -> p.Nickname <> name)
-            { model with Players = players }
-        | _ -> model
-
-    fm, Cmd.none
-
-let playerComp (player: Player) =
-    Html.div [
-        Attr.className [ "rounded"; "bg-red-600"; "text-white"; "w-fit"; "px-3.5"; "py-2" ]
-        Attr.text player.Nickname
-    ]
+type Model = { Nickname: string; RoomCode: string }
 
 let view () =
     // let nextId = Helpers.makeIdGenerator()
@@ -52,9 +28,8 @@ let view () =
                 (fun _ ->
                     dispatch (
                         AddPlayer {
-                            Nickname = "Cody"
+                            Nickname = Nickname "Cody"
                             Avatar = { Color = Red }
-                            Actor = false
                         }
                     ))
                 []
